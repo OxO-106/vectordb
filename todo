@@ -5,5 +5,12 @@
 [x] calculate the ratio of the entropies to get the ground truth
     6.629007/4.150625 = 1.597349
 [x] use PCA to reduce dimension from 512 -> 256 -> 128 -> 64
-    [] calculate entropy and entropy ratio
-[] calculate entropy with embeddings
+    [x] calculate entropy and entropy ratio
+[x] calculate entropy with embeddings
+
+[x] reduce dimension to 32, 16 and 50
+    [x] calculate entropy
+    [] is the pattern still there
+[] image dimension kept unchanged, text dimension reduce to 50
+[] (alternative approach) dimension ratio 1.6:1 reduce text dimension
+[] calculate precision at k

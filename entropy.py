@@ -73,7 +73,8 @@ def calculate_text_entropy(text: str) -> float:
     entropy = 0
     for count in counter.values():
         probability = count / length
-        entropy -= probability * math.log2(probability)
+        if probability > 0:  # Avoid log(0)
+            entropy -= probability * math.log2(probability)
 
     return entropy
 
