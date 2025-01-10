@@ -14,3 +14,69 @@
 [] image dimension kept unchanged, text dimension reduce to 50
 [] (alternative approach) dimension ratio 1.6:1 reduce text dimension
 [] calculate precision at k
+
+50
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0117
+precision@10: 0.0352
+
+160
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0078
+precision@10: 0.0312
+
+128
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0078
+precision@10: 0.0195
+
+64
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0117
+precision@10: 0.0352
+
+32
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0117
+precision@10: 0.0312
+
+16
+Results for original embeddings:
+precision@1: 0.6094
+precision@5: 0.7891
+precision@10: 0.8555
+
+Results for reduced embeddings:
+precision@1: 0.0000
+precision@5: 0.0117
+precision@10: 0.0234
