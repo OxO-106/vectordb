@@ -17,7 +17,7 @@ def analyze_embedding_entropies(csv_file):
     # Get dimensions from column names dynamically
     dimensions = []
     image_means = []
-    caption_means = []
+    reference_means = []
 
     # Find all dimensions present in the column names
     for col in df.columns:
@@ -32,13 +32,13 @@ def analyze_embedding_entropies(csv_file):
     # Calculate means for each dimension
     for dim in dimensions:
         image_col = f'image_embedding_entropy_{dim}'
-        caption_col = f'reference_embedding_entropy_{dim}'
+        reference_col = f'reference_embedding_entropy_{dim}'
 
         image_means.append(df[image_col].mean())
-        caption_means.append(df[caption_col].mean())
+        reference_means.append(df[reference_col].mean())
         print(f"\nDimension {dim}:")
         print(f"Image mean: {df[image_col].mean():.4f}")
-        print(f"Caption mean: {df[caption_col].mean():.4f}")
+        print(f"Reference mean: {df[reference_col].mean():.4f}")
 
     # Set the style to a clean, modern look
     plt.style.use('classic')
@@ -64,21 +64,21 @@ def analyze_embedding_entropies(csv_file):
 
     # Plot 2: Caption Embedding Entropies
     plt.figure(figsize=(12, 7))
-    plt.plot(dimensions, caption_means, marker='o', linewidth=2, markersize=8, color='#4CAF50')
+    plt.plot(dimensions, reference_means, marker='o', linewidth=2, markersize=8, color='#4CAF50')
     plt.xscale('log', base=2)
     plt.xlabel('Embedding Dimension', fontsize=12, fontweight='bold')
     plt.ylabel('Mean Entropy', fontsize=12, fontweight='bold')
-    plt.title('Mean Caption Embedding Entropy vs. Dimension', fontsize=14, pad=20)
+    plt.title('Mean Reference Embedding Entropy vs. Dimension', fontsize=14, pad=20)
     plt.grid(True, linestyle='--', alpha=0.7)
 
     # Add value annotations
-    for x, y in zip(dimensions, caption_means):
+    for x, y in zip(dimensions, reference_means):
         plt.annotate(f'{y:.2f}', (x, y), textcoords="offset points", xytext=(0,10),
                     ha='center', fontsize=10)
 
     # Improve the layout
     plt.tight_layout()
-    plt.savefig(os.path.join('data', 'caption_embedding_entropy.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join('data', 'reference_embedding_entropy.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
     # Analysis
@@ -87,21 +87,21 @@ def analyze_embedding_entropies(csv_file):
 
     # Calculate entropy per dimension
     print("\nEntropy per dimension:")
-    for dim, img_mean, cap_mean in zip(dimensions, image_means, caption_means):
+    for dim, img_mean, cap_mean in zip(dimensions, image_means, reference_means):
         entropy_per_dim_img = img_mean / dim
         entropy_per_dim_cap = cap_mean / dim
         print(f"\nDimension {dim}:")
         print(f"Image: {entropy_per_dim_img:.4f} bits/dimension")
-        print(f"Caption: {entropy_per_dim_cap:.4f} bits/dimension")
+        print(f"Reference: {entropy_per_dim_cap:.4f} bits/dimension")
 
     # Calculate reduction ratios between consecutive dimensions
     print("\nEntropy reduction ratios between consecutive dimensions:")
     for i in range(len(dimensions)-1):
         img_ratio = image_means[i+1] / image_means[i]
-        cap_ratio = caption_means[i+1] / caption_means[i]
+        cap_ratio = reference_means[i+1] / reference_means[i]
         print(f"\nFrom {dimensions[i]} to {dimensions[i+1]}:")
         print(f"Image: {img_ratio:.4f}")
-        print(f"Caption: {cap_ratio:.4f}")
+        print(f"Reference: {cap_ratio:.4f}")
 
 if __name__ == "__main__":
     csv_file = os.path.join('data', 'embedding_entropy.csv')
