@@ -129,7 +129,7 @@ if __name__ == "__main__":
     # Set up paths
     DATA_FOLDER = "data"
     IMAGE_FOLDER = "img"
-    CAPTION_FILE = os.path.join(DATA_FOLDER, "data256.csv")
+    CAPTION_FILE = os.path.join(DATA_FOLDER, "data320.csv")
     OUTPUT_FILE = os.path.join(DATA_FOLDER, "entropy.csv")
 
     # Process the dataset with color entropy

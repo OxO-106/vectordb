@@ -14,3 +14,23 @@
 [] image dimension kept unchanged, text dimension reduce to 50
 [] (alternative approach) dimension ratio 1.6:1 reduce text dimension
 [] calculate precision at k
+
+Image Total Entropy:
+mean       6.679186
+std        1.653641
+min        0.115694
+25%        6.727632
+50%        7.327181
+75%        7.545267
+max        7.938215
+
+Text Entropy:
+mean       4.169321
+std        0.379904
+min        2.405639
+25%        3.957847
+50%        4.174184
+75%        4.385032
+max        5.382731
+
+6.679186/4.169321 = 1.602

@@ -71,7 +71,7 @@ def process_all_data(csv_path, img_folder):
 def main():
     # Set paths with data folder
     data_folder = 'data'
-    csv_path = os.path.join(data_folder, 'data256.csv')
+    csv_path = os.path.join(data_folder, 'data320.csv')
     img_folder = 'img'
     output_path = os.path.join(data_folder, 'embedding.csv')
 

@@ -13,7 +13,7 @@ ds = load_dataset("wikimedia/wit_base", split="train", streaming=True)
 # Create the "img" folder if it doesn't exist
 os.makedirs("img", exist_ok=True)
 
-# Ensure the data folder exists (though you mentioned it already exists)
+# Ensure the data folder exists
 data_folder = "data"
 if not os.path.exists(data_folder):
     print(f"Warning: '{data_folder}' folder not found. Creating it...")
@@ -47,7 +47,7 @@ for example in ds:
             try:
                 # Download the image using requests with the custom User-Agent header
                 response = requests.get(image_url, headers={"User-Agent": user_agent}, timeout=10)
-                response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+                response.raise_for_status()
                 with open(image_path, "wb") as file:
                     file.write(response.content)
             except (requests.exceptions.RequestException, IOError) as e:
@@ -62,16 +62,17 @@ for example in ds:
             })
 
             count += 1
-            if count >= 256:
+            if count % 50 == 0:  # Print progress every 50 images
+                print(f"Downloaded {count} images...")
+            if count >= 320:  # Changed from 256 to 500
                 break
     except Exception as e:
-        # Skip entries that encounter any errors
         print(f"Skipped entry due to error: {str(e)}")
 
 # Create a DataFrame from the cleaned data
-data256 = pd.DataFrame(cleaned_data)
+data320 = pd.DataFrame(cleaned_data)  # Changed variable name to reflect new count
 
 # Save the DataFrame as a CSV file in the data folder
-csv_path = os.path.join(data_folder, 'data256.csv')
-data256.to_csv(csv_path, index=False)
+csv_path = os.path.join(data_folder, 'data320.csv')  # Changed filename to reflect new count
+data320.to_csv(csv_path, index=False)
 print(f"Dataset saved to {csv_path}")
