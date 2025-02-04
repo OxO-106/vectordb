@@ -8,7 +8,7 @@ def parse_embedding(embedding_str: str) -> np.ndarray:
     values = embedding_str.strip('[]').split(',')
     return np.array([float(x) for x in values])
 
-def apply_pca(embeddings: np.ndarray, n_components: int = 256) -> tuple:
+def apply_pca(embeddings: np.ndarray, n_components: int) -> tuple:
     """
     Apply PCA to reduce dimensionality of embeddings.
 
@@ -25,7 +25,7 @@ def apply_pca(embeddings: np.ndarray, n_components: int = 256) -> tuple:
 
     return reduced_embeddings, pca, explained_variance
 
-def process_embeddings(input_file: str, n_components: int = 256) -> pd.DataFrame:
+def process_embeddings(input_file: str, n_components: int) -> pd.DataFrame:
     """Process embeddings and reduce their dimensionality using PCA"""
 
     # Read the embeddings
@@ -59,10 +59,10 @@ if __name__ == "__main__":
     # Set up paths
     DATA_FOLDER = "data"
     INPUT_FILE = os.path.join(DATA_FOLDER, "embedding.csv")
-    OUTPUT_FILE = os.path.join(DATA_FOLDER, "320.csv")
+    OUTPUT_FILE = os.path.join(DATA_FOLDER, "50.csv")
 
     # Set the target dimensionality
-    N_COMPONENTS = 320
+    N_COMPONENTS = 50
 
     # Process embeddings
     print("Starting PCA dimension reduction...")

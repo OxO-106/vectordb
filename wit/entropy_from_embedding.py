@@ -85,14 +85,14 @@ if __name__ == "__main__":
     DATA_FOLDER = "data"
 
     # Change this line to process different embedding files
-    INPUT_FILE = os.path.join(DATA_FOLDER, "160.csv")
+    INPUT_FILE = os.path.join(DATA_FOLDER, "50.csv")
 
     # Output file remains constant
     OUTPUT_FILE = os.path.join(DATA_FOLDER, "embedding_entropy.csv")
 
     # Add a suffix to distinguish the source of embeddings
     # For example: "" for original embeddings, "_reduced" for reduced embeddings
-    COLUMN_SUFFIX = "_160"  # Change this based on the input file type
+    COLUMN_SUFFIX = "_50"  # Change this based on the input file type
 
     # Process embeddings and append results
     print(f"Processing embeddings from {os.path.basename(INPUT_FILE)}...")
