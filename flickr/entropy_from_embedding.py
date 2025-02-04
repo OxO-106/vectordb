@@ -90,9 +90,9 @@ def process_embeddings(data_file: str, output_file: str, column_suffix: str = ''
 if __name__ == "__main__":
     # Set up paths
     DATA_FOLDER = "data"
-    INPUT_FILE = os.path.join(DATA_FOLDER, "16.csv")
+    INPUT_FILE = os.path.join(DATA_FOLDER, "25.csv")
     OUTPUT_FILE = os.path.join(DATA_FOLDER, "embedding_entropy.csv")
-    COLUMN_SUFFIX = "_16"
+    COLUMN_SUFFIX = "_25"
 
     # Process embeddings and append results
     print(f"Processing embeddings from {os.path.basename(INPUT_FILE)}...")
