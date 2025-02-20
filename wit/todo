@@ -34,3 +34,19 @@ min        2.405639
 max        5.382731
 
 6.679186/4.169321 = 1.602
+
+Combined Embeddings Precision@K Results
+(Original: 1024D to Reduced: 562D)
+--------------------------------------------------
+K=5:
+  Mean Precision: 0.8525
+  Std Deviation: 0.1313
+  Dimension: {'original': 1024, 'reduced': 562}
+K=10:
+  Mean Precision: 0.8816
+  Std Deviation: 0.0909
+  Dimension: {'original': 1024, 'reduced': 562}
+K=15:
+  Mean Precision: 0.8833
+  Std Deviation: 0.0693
+  Dimension: {'original': 1024, 'reduced': 562}
