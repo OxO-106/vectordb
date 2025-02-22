@@ -41,9 +41,7 @@ def evaluate_combined_embeddings(original_file, reduced_file, k_values=[5, 10, 1
     reduced_caption_vecs = reduced_caption_vecs[valid_indices]
 
     # Combine embeddings
-    # Original: 512D image + 512D caption = 1024D
     original_combined = combine_embeddings(original_image_vecs, original_caption_vecs)
-    # Reduced: 512D image + 50D caption = 562D
     reduced_combined = combine_embeddings(original_image_vecs, reduced_caption_vecs)
 
     # Calculate distance matrices
@@ -71,22 +69,54 @@ def evaluate_combined_embeddings(original_file, reduced_file, k_values=[5, 10, 1
             'mean': avg_precision,
             'std': std_precision,
             'dimensionality': {
-                'original': original_combined.shape[1],  # should be 1024
-                'reduced': reduced_combined.shape[1]     # should be 562
+                'original': original_combined.shape[1],
+                'reduced': reduced_combined.shape[1]
             }
         }
 
     return results
 
+def save_precision_results(results, reduced_dim, output_file='data/precision.csv'):
+    """Save precision results to CSV file, appending if file exists"""
+    # Create a dictionary with the required format
+    data = {
+        'reduced_dimension': [reduced_dim],
+        'precision_at_5': [results[5]['mean']],
+        'precision_at_10': [results[10]['mean']],
+        'precision_at_15': [results[15]['mean']]
+    }
+
+    # Convert new data to DataFrame
+    new_df = pd.DataFrame(data)
+
+    try:
+        # Try to read existing CSV file
+        existing_df = pd.read_csv(output_file)
+        # Append new data to existing data
+        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+        # Sort by reduced_dimension for better organization
+        combined_df = combined_df.sort_values('reduced_dimension').reset_index(drop=True)
+    except FileNotFoundError:
+        # If file doesn't exist, use only new data
+        combined_df = new_df
+
+    # Save to CSV
+    combined_df.to_csv(output_file, index=False)
+
 if __name__ == "__main__":
     # Evaluate combined embeddings
     results = evaluate_combined_embeddings('embedding.csv', '16.csv')
+    reduced_dim = 16
 
+    # Print results
     print("\nCombined Embeddings Precision@K Results")
-    print(f"(Original: 1024D to Reduced: 562D)")
     print("-" * 50)
     for k, metrics in results.items():
         print(f"K={k}:")
         print(f"  Mean Precision: {metrics['mean']:.4f}")
         print(f"  Std Deviation: {metrics['std']:.4f}")
         print(f"  Dimension: {metrics['dimensionality']}")
+
+    # Save results to CSV
+    save_precision_results(results, reduced_dim)
+    print(f"\nResults have been saved to precision.csv")
