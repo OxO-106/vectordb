@@ -105,8 +105,8 @@ def save_precision_results(results, reduced_dim, output_file='data/precision.csv
 
 if __name__ == "__main__":
     # Evaluate combined embeddings
-    results = evaluate_combined_embeddings('embedding.csv', '16.csv')
-    reduced_dim = 16
+    results = evaluate_combined_embeddings('embedding.csv', '1.csv')
+    reduced_dim = 1
 
     # Print results
     print("\nCombined Embeddings Precision@K Results")
