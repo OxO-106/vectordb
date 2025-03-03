@@ -50,3 +50,26 @@ K=15:
   Mean Precision: 0.8833
   Std Deviation: 0.0693
   Dimension: {'original': 1024, 'reduced': 562}
+
+Precision@5:
+Equation: y = 0.6873 + (1.0634 - 0.6873) * (x^1.0164 / (59.4725^1.0164 + x^1.0164))
+RMSE: 0.006563
+R-squared: 0.996273
+Inflection point at x = 59.4725
+Function value at this point: 0.8753
+
+
+Precision@10:
+Equation: y = 0.7337 + (1.0399 - 0.7337) * (x^1.0583 / (49.4745^1.0583 + x^1.0583))
+RMSE: 0.005499
+R-squared: 0.996337
+Inflection point at x = 49.4745
+Function value at this point: 0.8868
+
+
+Precision@15:
+Equation: y = 0.7471 + (1.0425 - 0.7471) * (x^1.0562 / (53.0529^1.0562 + x^1.0562))
+RMSE: 0.004844
+R-squared: 0.996907
+Inflection point at x = 53.0529
+Function value at this point: 0.8948
