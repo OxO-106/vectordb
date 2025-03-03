@@ -59,10 +59,10 @@ if __name__ == "__main__":
     # Set up paths
     DATA_FOLDER = "data"
     INPUT_FILE = os.path.join(DATA_FOLDER, "embeddings.csv")
-    OUTPUT_FILE = os.path.join(DATA_FOLDER, "25.csv")
+    OUTPUT_FILE = os.path.join(DATA_FOLDER, "1.csv")
 
     # Set the target dimensionality
-    N_COMPONENTS = 25
+    N_COMPONENTS = 1
 
     # Process embeddings
     print("Starting PCA dimension reduction...")
