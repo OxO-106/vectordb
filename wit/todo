@@ -73,3 +73,36 @@ RMSE: 0.004844
 R-squared: 0.996907
 Inflection point at x = 53.0529
 Function value at this point: 0.8948
+
+
+Results for Precision@5:
+Best fitting model: Exponential (RMSE: 0.0065)
+
+Fitted equations:
+  Logistic: f(x) = 1.5195 / (1 + exp(-0.005981 * (x - 16.3964)))
+  Logarithmic: f(x) = 0.0723 * log(x + 1) + 0.5893
+  Exponential: f(x) = 0.3001 * (1 - exp(-0.014350 * x)) + 0.6997
+
+50% of (max+min) / 2
+
+49.2
+
+Results for Precision@10:
+Best fitting model: Exponential (RMSE: 0.0049)
+
+Fitted equations:
+  Logistic: f(x) = 1.5719 / (1 + exp(-0.005135 * (x - 10.8762)))
+  Logarithmic: f(x) = 0.0609 * log(x + 1) + 0.6550
+  Exponential: f(x) = 0.2539 * (1 - exp(-0.016077 * x)) + 0.7419
+
+44.1
+
+Results for Precision@15:
+Best fitting model: Exponential (RMSE: 0.0042)
+
+Fitted equations:
+  Logistic: f(x) = 1.5999 / (1 + exp(-0.004719 * (x - 12.9924)))
+  Logarithmic: f(x) = 0.0585 * log(x + 1) + 0.6691
+  Exponential: f(x) = 0.2437 * (1 - exp(-0.015615 * x)) + 0.7541
+
+45.4
