@@ -89,7 +89,8 @@ def calculate_rate_of_change(precision_results):
             'prev_precision': prev_precision,
             'curr_precision': curr_precision,
             'abs_difference': abs_diff,
-            'rate_of_change': rate
+            'rate_of_change': rate,
+            'mid_dimension': (prev_dim + curr_dim) / 2  # Add mid-point for x-axis plotting
         })
     
     return rate_of_change
@@ -189,7 +190,18 @@ def main():
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.savefig(os.path.join(plots_dir, "precision_vs_dimension.png"), dpi=300, bbox_inches='tight')
     
-    # Plot rate of change vs. dimension
+    # Plot rate of change as a line graph
+    plt.figure(figsize=(12, 6))
+    plt.plot([r['mid_dimension'] for r in rate_of_change], 
+             [r['rate_of_change'] for r in rate_of_change], 
+             'o-', markersize=4, color='blue')
+    plt.xlabel('Dimension')
+    plt.ylabel('Rate of Change')
+    plt.title('Rate of Change in Precision@10 vs. Dimension')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.savefig(os.path.join(plots_dir, "rate_of_change_line.png"), dpi=300, bbox_inches='tight')
+    
+    # Plot rate of change as a bar chart (for specific ranges)
     plt.figure(figsize=(12, 6))
     plt.bar([f"{r['prev_dimension']}-{r['curr_dimension']}" for r in rate_of_change[::8]],  # Use every 8th label to avoid crowding
             [r['rate_of_change'] for r in rate_of_change[::8]],
@@ -200,7 +212,7 @@ def main():
     plt.xticks(rotation=45)
     plt.grid(True, linestyle='--', alpha=0.7, axis='y')
     plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, "rate_of_change.png"), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(plots_dir, "rate_of_change_bar.png"), dpi=300, bbox_inches='tight')
     
     # Plot top 10 highest rate of change
     top_10_roc = sorted_rate_of_change[:10]
@@ -215,6 +227,26 @@ def main():
     plt.grid(True, linestyle='--', alpha=0.7, axis='y')
     plt.tight_layout()
     plt.savefig(os.path.join(plots_dir, "top10_rate_of_change.png"), dpi=300, bbox_inches='tight')
+    
+    # Plot smoothed rate of change using moving average
+    window_size = 5
+    smoothed_roc = []
+    
+    for i in range(len(rate_of_change) - window_size + 1):
+        window = rate_of_change[i:i+window_size]
+        avg_roc = sum(r['rate_of_change'] for r in window) / window_size
+        mid_dim = window[window_size // 2]['mid_dimension']
+        smoothed_roc.append((mid_dim, avg_roc))
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot([r[0] for r in smoothed_roc], 
+             [r[1] for r in smoothed_roc], 
+             '-', linewidth=2, color='green')
+    plt.xlabel('Dimension')
+    plt.ylabel('Smoothed Rate of Change (Moving Average)')
+    plt.title(f'Smoothed Rate of Change (Window Size = {window_size})')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.savefig(os.path.join(plots_dir, "smoothed_rate_of_change.png"), dpi=300, bbox_inches='tight')
     
     print("\nAnalysis complete!")
     print(f"Precision results saved to: {os.path.join(data_dir, 'precision4.csv')}")
