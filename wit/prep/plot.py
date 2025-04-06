@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 # Load the data from precision4.csv
-data = pd.read_csv('data/precision4.csv')
+data = pd.read_csv('data/precision.csv')
 x = data['dimension'].values
 y10 = data['precision_at_10'].values
 

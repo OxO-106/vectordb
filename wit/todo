@@ -51,62 +51,6 @@ K=15:
   Std Deviation: 0.0693
   Dimension: {'original': 1024, 'reduced': 562}
 
-Precision@5:
-Equation: y = 0.6873 + (1.0634 - 0.6873) * (x^1.0164 / (59.4725^1.0164 + x^1.0164))
-RMSE: 0.006563
-R-squared: 0.996273
-Inflection point at x = 59.4725
-Function value at this point: 0.8753
-
-
-Precision@10:
-Equation: y = 0.7337 + (1.0399 - 0.7337) * (x^1.0583 / (49.4745^1.0583 + x^1.0583))
-RMSE: 0.005499
-R-squared: 0.996337
-Inflection point at x = 49.4745
-Function value at this point: 0.8868
-
-
-Precision@15:
-Equation: y = 0.7471 + (1.0425 - 0.7471) * (x^1.0562 / (53.0529^1.0562 + x^1.0562))
-RMSE: 0.004844
-R-squared: 0.996907
-Inflection point at x = 53.0529
-Function value at this point: 0.8948
-
-
-Results for Precision@5:
-Best fitting model: Exponential (RMSE: 0.0065)
-
-Fitted equations:
-  Logistic: f(x) = 1.5195 / (1 + exp(-0.005981 * (x - 16.3964)))
-  Logarithmic: f(x) = 0.0723 * log(x + 1) + 0.5893
-  Exponential: f(x) = 0.3001 * (1 - exp(-0.014350 * x)) + 0.6997
-
-50% of (max+min) / 2
-
-49.2
-
-Results for Precision@10:
-Best fitting model: Exponential (RMSE: 0.0049)
-
-Fitted equations:
-  Logistic: f(x) = 1.5719 / (1 + exp(-0.005135 * (x - 10.8762)))
-  Logarithmic: f(x) = 0.0609 * log(x + 1) + 0.6550
-  Exponential: f(x) = 0.2539 * (1 - exp(-0.016077 * x)) + 0.7419
-
-44.1
-
-Results for Precision@15:
-Best fitting model: Exponential (RMSE: 0.0042)
-
-Fitted equations:
-  Logistic: f(x) = 1.5999 / (1 + exp(-0.004719 * (x - 12.9924)))
-  Logarithmic: f(x) = 0.0585 * log(x + 1) + 0.6691
-  Exponential: f(x) = 0.2437 * (1 - exp(-0.015615 * x)) + 0.7541
-
-45.4
-
 
 Top 10 dimension ranges with highest rate of change:
 1. 4-8: 0.004453
@@ -119,3 +63,48 @@ Top 10 dimension ranges with highest rate of change:
 8. 36-40: 0.002188
 9. 28-32: 0.002109
 10. 40-44: 0.002109
+
+
+-	Plot fitting
+-	50%
+-	Vector ratio to entropy ratio
+
+1.	Graph
+2.	Vector ratio to entropy ratio 不丢失信息
+3.	50% 是大概
+
+
+Data summary:
+           dimension  precision_at_5  precision_at_10  precision_at_15
+count     161.000000      161.000000       161.000000       161.000000
+mean      160.006211        0.934344         0.946508         0.948916
+std        93.230929        0.075683         0.062539         0.060890
+min         1.000000        0.673750         0.723750         0.736667
+25%        80.000000        0.900000         0.924375         0.924375
+50%       160.000000        0.966875         0.973750         0.978750
+75%       240.000000        0.990625         0.990313         0.991667
+max       320.000000        1.000000         1.000000         1.000000
+midpoint         NaN        0.836875         0.861875         0.868333
+
+Best Sigmoid Results (from 10 trials):
+
+k=5:
+  Best from Trial: 38
+  Method: differential_evolution
+  R�: 0.9965175498
+  RMSE: 0.0044523475
+  Equation: y = 1151.901396/(1+exp(-0.013601*(x--607.905873))) + -1150.899533
+
+k=10:
+  Best from Trial: 6
+  Method: differential_evolution
+  R�: 0.9970505099
+  RMSE: 0.0033858732
+  Equation: y = 1199.577990/(1+exp(-0.015774*(x--537.279471))) + -1198.581776
+
+k=15:
+  Best from Trial: 73
+  Method: differential_evolution
+  R�: 0.9981388607
+  RMSE: 0.0026186642
+  Equation: y = 1161.290254/(1+exp(-0.015077*(x--562.258123))) + -1160.291194
