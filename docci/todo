@@ -21,3 +21,42 @@ min        3.893989
 max        4.277218
 
 7.398351 / 4.099353 = 1.8048
+
+=== SUMMARY REPORT ===
+
+Best Sigmoid Results (from 100 trials):
+
+k=5:
+  Best from Trial: 38
+  Method: differential_evolution
+  R�: 0.9949715064
+  RMSE: 0.0050812161
+  Equation: y = 1198.935326/(1+exp(-0.017123*(x--485.881439))) + -1197.940269
+
+k=10:
+  Best from Trial: 90
+  Method: differential_evolution
+  R�: 0.9936807336
+  RMSE: 0.0050501231
+  Equation: y = 1147.612477/(1+exp(-0.016772*(x--500.921561))) + -1146.617585
+
+k=15:
+  Best from Trial: 47
+  Method: differential_evolution
+  R�: 0.9960791793
+  RMSE: 0.0037337976
+  Equation: y = 1155.150565/(1+exp(-0.017158*(x--493.363073))) + -1154.154453
+
+precision_at_10:
+  EC50 (inflection point): 41.5480
+  95% Confidence Interval: (40.2091, 42.8870)
+
+  All 4PL Parameters (value, lower CI, upper CI):
+  a (lower asymptote): 0.7125 (95% CI: 0.7074-0.7176)
+  b (Hill slope): 1.0178 (95% CI: 0.9754-1.0601)
+  c (EC50): 41.5480 (95% CI: 40.2091-42.8870)
+  d (upper asymptote): 1.0376 (95% CI: 1.0331-1.0421)
+
+  Goodness of Fit:
+  - R-squared: 0.997559
+  - RMSE: 0.003139

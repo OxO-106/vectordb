@@ -21,3 +21,28 @@ min        3.528407
 max        4.079529
 
 7.356762 / 3.815569 = 1.928
+
+=== SUMMARY REPORT ===
+
+Best Sigmoid Results (from 100 trials):
+
+k=5:
+  Best from Trial: 51
+  Method: differential_evolution
+  R�: 0.9924691795
+  RMSE: 0.0050781551
+  Equation: y = 1171.775486/(1+exp(-0.020796*(x--406.452781))) + -1170.778159
+
+k=10:
+  Best from Trial: 65
+  Method: differential_evolution
+  R�: 0.9952156825
+  RMSE: 0.0036313617
+  Equation: y = 1157.403640/(1+exp(-0.021643*(x--394.406257))) + -1156.407242
+
+k=15:
+  Best from Trial: 31
+  Method: differential_evolution
+  R�: 0.9952856377
+  RMSE: 0.0032490382
+  Equation: y = 1149.203226/(1+exp(-0.022824*(x--377.578912))) + -1148.206571

@@ -41,14 +41,20 @@ for i, label in enumerate(labels):
     # Extract x and y data
     x_data = data['dimension'].values
     y_data = data[label].values
-
-    # Initial parameter guess [a, b, c, d]
-    # a: min value, d: max value, c: middle x, b: slope (positive for increasing)
-    p0 = [min(y_data), 1, np.median(x_data), max(y_data)]
+    
+    # Get min/max values for bounds
+    min_y = min(y_data)
+    max_y = max(y_data)
 
     try:
-        # Perform the curve fit
-        popt, pcov = curve_fit(four_param_logistic, x_data, y_data, p0=p0)
+        # Set bounds to constrain the asymptotes to reasonable values
+        bounds = (
+            [min_y * 1.0, 0.1, 10, max_y * 1.0],  # Lower bounds
+            [min_y * 1.04, 5, 100, max_y * 1.04]    # Upper bounds
+        )
+        
+        # Perform the curve fit with bounds
+        popt, pcov = curve_fit(four_param_logistic, x_data, y_data, bounds=bounds)
 
         # Get parameter values
         a, b, c, d = popt
@@ -187,7 +193,3 @@ if len(ec50_results) > 1:
     else:
         print("\nThe EC50 values are relatively close across different metrics.")
         print("This suggests consistent behavior across different precision metrics.")
-
-    print("\n===== Goodness of Fit Summary =====")
-    for i, label in enumerate(ec50_labels):
-        print(f"{label}: R² = {r2_values[i]:.4f}, RMSE = {rmse_values[i]:.4f}")
