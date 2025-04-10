@@ -4,6 +4,21 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from scipy import stats
 from sklearn.metrics import r2_score, mean_squared_error
+import matplotlib as mpl
+from matplotlib.patches import Rectangle
+
+# Set high-quality plot parameters without LaTeX
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.size": 10,
+    "axes.labelsize": 11,
+    "axes.titlesize": 12,
+    "figure.titlesize": 12
+})
+
+# Set figure DPI for high-quality output
+plt.rcParams['figure.dpi'] = 300
+plt.rcParams['savefig.dpi'] = 600
 
 # Define the 4-parameter logistic function
 def four_param_logistic(x, a, b, c, d):
@@ -24,20 +39,18 @@ def four_param_logistic(x, a, b, c, d):
 # Load the data
 data = pd.read_csv('data/precision.csv')
 
-# Prepare figure for plotting
-plt.figure(figsize=(12, 8))
-colors = ['blue', 'green', 'red']
+# Define metrics to plot
 labels = ['precision_at_5', 'precision_at_10', 'precision_at_15']
-markers = ['o', 's', '^']
+titles = ['Precision@5', 'Precision@10', 'Precision@15']
 
 # Store EC50 values, confidence intervals, and goodness-of-fit metrics
 ec50_results = []
 
-# Create x values for smooth curve plotting
-x_smooth = np.linspace(min(data['dimension']) - 0.5, max(data['dimension']) + 2, 1000)
-
-# Process each precision metric
-for i, label in enumerate(labels):
+# Create a figure for each precision metric
+for i, (label, title) in enumerate(zip(labels, titles)):
+    # Create a new figure with appropriate size for a paper column
+    fig, ax = plt.subplots(figsize=(4, 3))
+    
     # Extract x and y data
     x_data = data['dimension'].values
     y_data = data[label].values
@@ -45,12 +58,19 @@ for i, label in enumerate(labels):
     # Get min/max values for bounds
     min_y = min(y_data)
     max_y = max(y_data)
+    
+    # Set x-axis limits with small padding
+    x_min = min(x_data) - 2
+    x_max = max(x_data) + 2
+    
+    # Create x values for smooth curve plotting (use more points for smoother curve)
+    x_smooth = np.linspace(x_min, x_max, 1000)
 
     try:
         # Set bounds to constrain the asymptotes to reasonable values
         bounds = (
-            [min_y * 1.0, 0.1, 10, max_y * 1.0],  # Lower bounds
-            [min_y * 1.04, 5, 100, max_y * 1.04]    # Upper bounds
+            [min_y * 0.95, 0.1, 10, max_y * 0.95],  # Lower bounds
+            [min_y * 1.05, 5, 100, max_y * 1.05]    # Upper bounds
         )
         
         # Perform the curve fit with bounds
@@ -63,7 +83,7 @@ for i, label in enumerate(labels):
         perr = np.sqrt(np.diag(pcov))
         ci_95 = perr * 1.96  # 95% confidence interval
 
-        # Create the fitted curve
+        # Create the fitted curve values for the smooth x range
         y_fit = four_param_logistic(x_smooth, *popt)
 
         # Calculate fitted values for the original x data for R² and RMSE
@@ -75,17 +95,38 @@ for i, label in enumerate(labels):
         # Calculate RMSE (Root Mean Square Error)
         rmse = np.sqrt(mean_squared_error(y_data, y_fit_original))
 
-        # Plot the data and fit
-        plt.scatter(x_data, y_data, color=colors[i], marker=markers[i], s=60, label=f'{label} (data)')
-        plt.plot(x_smooth, y_fit, color=colors[i], linestyle='-', linewidth=2, label=f'{label} (4PL fit)')
+        # Plot the data points
+        ax.scatter(x_data, y_data, color='black', marker='o', s=25, alpha=0.8)
+        
+        # Plot the fitted curve with clear styling
+        ax.plot(x_smooth, y_fit, color='blue', linestyle='-', linewidth=2.0)
 
-        # Mark the EC50 point
+        # Mark the EC50 point (where the curve reaches its half-maximal value)
         ec50_y = four_param_logistic(c, *popt)
-        plt.scatter(c, ec50_y, color=colors[i], marker='x', s=100, zorder=5)
-        plt.axvline(x=c, color=colors[i], linestyle='--', alpha=0.3)
-        plt.axhline(y=ec50_y, color=colors[i], linestyle='--', alpha=0.3)
+        
+        # Add vertical and horizontal lines to mark the EC50 point
+        ax.axvline(x=c, color='gray', linestyle='--', alpha=0.7, linewidth=1.0)
+        ax.axhline(y=ec50_y, color='gray', linestyle='--', alpha=0.7, linewidth=1.0)
+        
+        # Add an X marker at the EC50 intersection
+        ax.plot(c, ec50_y, 'x', color='gray', markersize=10, markeredgewidth=2, alpha=0.8)
+        
+        # MODIFIED: Improved equation positioning in the white space
+        # Use relative positioning instead of absolute to ensure proper placement in the bottom right
+        
+        # Create the equation text with the actual parameter values
+        eq_text = f"$f(x) = {d:.2f} + \\frac{{{a:.2f} - {d:.2f}}}{{1 + (\\frac{{x}}{{{c:.2f}}})^{{{b:.2f}}}}}$\n$R^2 = {r_squared:.4f}$"
+        
+        # Position the text in the bottom right corner using axes coordinates (0-1 range)
+        # This places it at 75% of x-axis width and 20% of y-axis height
+        ax.text(0.75, 0.2, eq_text, fontsize=8, 
+                transform=ax.transAxes,  # Use axes coordinates
+                ha='right',  # Horizontal alignment: right
+                va='bottom',  # Vertical alignment: bottom
+                bbox=dict(facecolor='white', alpha=0.8, edgecolor='lightgray', 
+                         boxstyle="round,pad=0.5"))
 
-        # Store EC50 results
+        # Store EC50 results for reporting
         ec50_results.append({
             'metric': label,
             'EC50': c,
@@ -106,73 +147,51 @@ for i, label in enumerate(labels):
     except Exception as e:
         print(f"Error fitting {label}: {e}")
         continue
-
-# Finalize the plot
-plt.xlabel('Dimension', fontsize=14)
-plt.ylabel('Precision', fontsize=14)
-plt.title('4-Parameter Logistic Model Fitting for Precision Data', fontsize=16)
-plt.grid(True, alpha=0.3)
-plt.legend(fontsize=12)
-
-# Add annotations for EC50 values and goodness-of-fit metrics
-y_pos = 0.25
-for i, result in enumerate(ec50_results):
-    plt.annotate(
-        f"{result['metric']}:\n" +
-        f"EC50 = {result['EC50']:.2f} (95% CI: {result['EC50_CI_lower']:.2f}-{result['EC50_CI_upper']:.2f})\n" +
-        f"R² = {result['goodness_of_fit']['R_squared']:.4f}, RMSE = {result['goodness_of_fit']['RMSE']:.4f}",
-        xy=(0.05, y_pos - i*0.07),
-        xycoords='axes fraction',
-        fontsize=10,
-        bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=colors[i], alpha=0.8)
-    )
-
-plt.tight_layout()
-plt.savefig('precision_4pl_fit.png', dpi=300)
-plt.show()
-
-# Print detailed EC50 analysis and parameter information
-print("\n===== EC50 Analysis =====")
-for result in ec50_results:
-    print(f"\n{result['metric']}:")
-    print(f"  EC50 (inflection point): {result['EC50']:.4f}")
-    print(f"  95% Confidence Interval: ({result['EC50_CI_lower']:.4f}, {result['EC50_CI_upper']:.4f})")
-
+    
+    # Add thicker horizontal asymptote at y=1 without text label
+    #ax.axhline(y=1.0, color='red', linestyle='-', alpha=0.8, linewidth=2.0)
+    
+    # Set axis labels
+    ax.set_xlabel('Dimension')
+    ax.set_ylabel('Precision')
+    
+    # Set title
+    ax.set_title(title)
+    
+    # Set tight grid for professional appearance
+    ax.grid(True, linestyle='--', alpha=0.3, linewidth=0.5)
+    
+    # Set y-axis to start from 0 and end at 1.05
+    ax.set_ylim(0, 1.05)
+    
+    # Set the x-axis limits
+    ax.set_xlim(x_min, x_max)
+    
+    # Add minor ticks
+    ax.minorticks_on()
+    
+    # Use a different approach than tight_layout to ensure everything fits
+    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.15)
+    
+    # Save the figure with a descriptive name and high resolution
+    fig.savefig(f'{label}_4pl_sigmod.pdf', format='pdf', bbox_inches='tight')
+    fig.savefig(f'{label}_4pl_sigmod.png', dpi=600, bbox_inches='tight')
+    
+    # Print detailed parameter information to the console
+    print(f"\n=== {title} ===")
+    print(f"  EC50 (inflection point): {c:.4f}")
+    print(f"  95% Confidence Interval: ({ec50_results[i]['EC50_CI_lower']:.4f}, {ec50_results[i]['EC50_CI_upper']:.4f})")
+    
     print("\n  All 4PL Parameters (value, lower CI, upper CI):")
-    for param_name, (value, ci_lower, ci_upper) in result['params'].items():
+    for param_name, (value, ci_lower, ci_upper) in ec50_results[i]['params'].items():
         print(f"  {param_name}: {value:.4f} (95% CI: {ci_lower:.4f}-{ci_upper:.4f})")
-
-    # Goodness of fit metrics
+    
     print("\n  Goodness of Fit:")
-    print(f"  - R-squared: {result['goodness_of_fit']['R_squared']:.6f}")
-    print(f"  - RMSE: {result['goodness_of_fit']['RMSE']:.6f}")
+    print(f"  - R-squared: {ec50_results[i]['goodness_of_fit']['R_squared']:.6f}")
+    print(f"  - RMSE: {ec50_results[i]['goodness_of_fit']['RMSE']:.6f}")
 
-    # Interpretation
-    print("\n  Interpretation:")
-    print(f"  - The dimension at which {result['metric']} reaches its half-maximal value is approximately {result['EC50']:.2f}")
-    print(f"  - The lower asymptote (minimum precision) is approximately {result['params']['a (lower asymptote)'][0]:.4f}")
-    print(f"  - The upper asymptote (maximum precision) is approximately {result['params']['d (upper asymptote)'][0]:.4f}")
-    if result['params']['b (Hill slope)'][0] > 0:
-        print(f"  - The positive Hill slope ({result['params']['b (Hill slope)'][0]:.4f}) indicates that precision increases with dimension")
-    else:
-        print(f"  - The negative Hill slope ({result['params']['b (Hill slope)'][0]:.4f}) indicates that precision decreases with dimension")
-    print(f"  - Steepness of the curve is determined by the Hill slope - higher absolute values indicate sharper transitions")
-
-    # Interpretation of goodness of fit
-    r2 = result['goodness_of_fit']['R_squared']
-    if r2 > 0.95:
-        print(f"  - The model fits the data extremely well (R² = {r2:.4f})")
-    elif r2 > 0.9:
-        print(f"  - The model fits the data very well (R² = {r2:.4f})")
-    elif r2 > 0.8:
-        print(f"  - The model fits the data well (R² = {r2:.4f})")
-    elif r2 > 0.6:
-        print(f"  - The model fits the data moderately well (R² = {r2:.4f})")
-    else:
-        print(f"  - The model does not fit the data well (R² = {r2:.4f})")
-
-# Comparative analysis of EC50 across metrics
-if len(ec50_results) > 1:
+# If all three metrics were successfully fitted, do a comparative analysis
+if len(ec50_results) == 3:
     print("\n===== Comparative EC50 Analysis =====")
     ec50_values = [result['EC50'] for result in ec50_results]
     ec50_labels = [result['metric'] for result in ec50_results]
