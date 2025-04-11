@@ -63,8 +63,8 @@ for i, (label, title) in enumerate(zip(labels, titles)):
     try:
         # Set bounds to constrain the asymptotes to reasonable values
         bounds = (
-            [min_y * 0.95, 0.1, 10, max_y * 0.95],  # Lower bounds
-            [min_y * 1.05, 5, 100, max_y * 1.05]    # Upper bounds
+            [min_y * 0.99, 0.1, 10, max_y * 0.99],  # Lower bounds
+            [min_y * 1.0, 5, 100, max_y * 1.0]    # Upper bounds
         )
         
         # Perform the curve fit with bounds
@@ -356,4 +356,82 @@ for i, (label, title) in enumerate(zip(labels, titles)):
     
     plt.close(fig)
 
-print("All 12 plots have been generated successfully.")
+# Group 5: Data points AND blue fitting curve with y axis starting from 0
+for i, (label, title) in enumerate(zip(labels, titles)):
+    if ec50_results[i] is None:
+        print(f"Skipping {label} due to fitting error")
+        continue
+        
+    # Create a new figure
+    fig, ax = plt.subplots(figsize=(4, 3))
+    
+    # Extract x and y data
+    x_data = data['dimension'].values
+    y_data = data[label].values
+    
+    # Get min/max values for bounds
+    x_min = min(x_data) - 2
+    x_max = max(x_data) + 2
+    
+    # Create x values for smooth curve plotting
+    x_smooth = np.linspace(x_min, x_max, 1000)
+    
+    # Plot the data points
+    ax.scatter(x_data, y_data, color='black', marker='o', s=25, alpha=0.8, label='Data points')
+    
+    # Get parameters and goodness-of-fit values
+    popt = ec50_results[i]['popt']
+    a, b, c, d = popt
+    r_squared = ec50_results[i]['goodness_of_fit']['R_squared']
+    rmse = ec50_results[i]['goodness_of_fit']['RMSE']
+    
+    # Create the fitted curve values
+    y_fit = four_param_logistic(x_smooth, *popt)
+    
+    # Plot the fitted curve in blue
+    ax.plot(x_smooth, y_fit, color='blue', linestyle='-', linewidth=2.0, label='Fitted curve')
+    
+    # Improved formula with larger x/c ratio and better spacing
+    equation = f"$f(x) = {d:.2f} + \\frac{{{a:.2f} - {d:.2f}}}{{1 + (\\frac{{x}}{{{c:.2f}}})^{{{b:.2f}}}}}$"
+    
+    # Add extra spacing and include RMSE
+    r2_text = f"\n\n$R^2 = {r_squared:.4f}$"
+    rmse_text = f"\n$RMSE = {rmse:.4f}$"
+    
+    # Position it with more margin on the right
+    ax.text(0.90, 0.20, equation + r2_text + rmse_text, 
+            transform=ax.transAxes, fontsize=9,
+            verticalalignment='bottom', horizontalalignment='right',
+            bbox=dict(boxstyle='round', facecolor='white', alpha=0.9, pad=0.7))
+    
+    # Set axis labels
+    ax.set_xlabel('Dimension')
+    ax.set_ylabel('Precision')
+    
+    # Set title
+    k_value = label.split('_')[-1]
+    ax.set_title(f'Precision@{k_value}')
+    
+    # Set y-axis to start from 0 and end at 1.05
+    ax.set_ylim(0, 1.05)
+    
+    # Set the x-axis limits
+    ax.set_xlim(x_min, x_max)
+    
+    # Add grid
+    ax.grid(True, linestyle='--', alpha=0.3, linewidth=0.5)
+    
+    # Add minor ticks
+    ax.minorticks_on()
+    
+    # Adjust layout - give more space on the right side
+    plt.subplots_adjust(left=0.15, right=0.90, top=0.9, bottom=0.15)
+    
+    # Save the figure
+    k_value = label.split('_')[-1]
+    fig.savefig(f'data_and_fit({k_value}).pdf', format='pdf', bbox_inches='tight')
+    fig.savefig(f'data_and_fit({k_value}).png', dpi=600, bbox_inches='tight')
+    
+    plt.close(fig)
+
+print("All 15 plots have been generated successfully.")
