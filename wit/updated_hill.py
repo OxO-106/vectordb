@@ -115,16 +115,16 @@ for i, (label, title) in enumerate(zip(labels, titles)):
         # Use relative positioning instead of absolute to ensure proper placement in the bottom right
         
         # Create the equation text with the actual parameter values
-        eq_text = f"$f(x) = {d:.2f} + \\frac{{{a:.2f} - {d:.2f}}}{{1 + (\\frac{{x}}{{{c:.2f}}})^{{{b:.2f}}}}}$\n$R^2 = {r_squared:.4f}$"
+        # eq_text = f"$f(x) = {d:.2f} + \\frac{{{a:.2f} - {d:.2f}}}{{1 + (\\frac{{x}}{{{c:.2f}}})^{{{b:.2f}}}}}$\n$R^2 = {r_squared:.4f}$"
         
         # Position the text in the bottom right corner using axes coordinates (0-1 range)
         # This places it at 75% of x-axis width and 20% of y-axis height
-        ax.text(0.75, 0.2, eq_text, fontsize=8, 
-                transform=ax.transAxes,  # Use axes coordinates
-                ha='right',  # Horizontal alignment: right
-                va='bottom',  # Vertical alignment: bottom
-                bbox=dict(facecolor='white', alpha=0.8, edgecolor='lightgray', 
-                         boxstyle="round,pad=0.5"))
+        # ax.text(0.75, 0.2, eq_text, fontsize=8, 
+        #         transform=ax.transAxes,  # Use axes coordinates
+        #         ha='right',  # Horizontal alignment: right
+        #         va='bottom',  # Vertical alignment: bottom
+        #         bbox=dict(facecolor='white', alpha=0.8, edgecolor='lightgray', 
+        #                  boxstyle="round,pad=0.5"))
 
         # Store EC50 results for reporting
         ec50_results.append({
@@ -178,37 +178,37 @@ for i, (label, title) in enumerate(zip(labels, titles)):
     fig.savefig(f'{label}_4pl_sigmod.png', dpi=600, bbox_inches='tight')
     
     # Print detailed parameter information to the console
-    print(f"\n=== {title} ===")
-    print(f"  EC50 (inflection point): {c:.4f}")
-    print(f"  95% Confidence Interval: ({ec50_results[i]['EC50_CI_lower']:.4f}, {ec50_results[i]['EC50_CI_upper']:.4f})")
+    # print(f"\n=== {title} ===")
+    # print(f"  EC50 (inflection point): {c:.4f}")
+    # print(f"  95% Confidence Interval: ({ec50_results[i]['EC50_CI_lower']:.4f}, {ec50_results[i]['EC50_CI_upper']:.4f})")
     
-    print("\n  All 4PL Parameters (value, lower CI, upper CI):")
-    for param_name, (value, ci_lower, ci_upper) in ec50_results[i]['params'].items():
-        print(f"  {param_name}: {value:.4f} (95% CI: {ci_lower:.4f}-{ci_upper:.4f})")
+    # print("\n  All 4PL Parameters (value, lower CI, upper CI):")
+    # for param_name, (value, ci_lower, ci_upper) in ec50_results[i]['params'].items():
+    #     print(f"  {param_name}: {value:.4f} (95% CI: {ci_lower:.4f}-{ci_upper:.4f})")
     
-    print("\n  Goodness of Fit:")
-    print(f"  - R-squared: {ec50_results[i]['goodness_of_fit']['R_squared']:.6f}")
-    print(f"  - RMSE: {ec50_results[i]['goodness_of_fit']['RMSE']:.6f}")
+    # print("\n  Goodness of Fit:")
+    # print(f"  - R-squared: {ec50_results[i]['goodness_of_fit']['R_squared']:.6f}")
+    # print(f"  - RMSE: {ec50_results[i]['goodness_of_fit']['RMSE']:.6f}")
 
 # If all three metrics were successfully fitted, do a comparative analysis
-if len(ec50_results) == 3:
-    print("\n===== Comparative EC50 Analysis =====")
-    ec50_values = [result['EC50'] for result in ec50_results]
-    ec50_labels = [result['metric'] for result in ec50_results]
-    r2_values = [result['goodness_of_fit']['R_squared'] for result in ec50_results]
-    rmse_values = [result['goodness_of_fit']['RMSE'] for result in ec50_results]
+# if len(ec50_results) == 3:
+#     print("\n===== Comparative EC50 Analysis =====")
+#     ec50_values = [result['EC50'] for result in ec50_results]
+#     ec50_labels = [result['metric'] for result in ec50_results]
+#     r2_values = [result['goodness_of_fit']['R_squared'] for result in ec50_results]
+#     rmse_values = [result['goodness_of_fit']['RMSE'] for result in ec50_results]
 
-    min_ec50_idx = np.argmin(ec50_values)
-    max_ec50_idx = np.argmax(ec50_values)
-    best_fit_idx = np.argmax(r2_values)
+#     min_ec50_idx = np.argmin(ec50_values)
+#     max_ec50_idx = np.argmax(ec50_values)
+#     best_fit_idx = np.argmax(r2_values)
 
-    print(f"Lowest EC50: {ec50_labels[min_ec50_idx]} ({ec50_values[min_ec50_idx]:.4f})")
-    print(f"Highest EC50: {ec50_labels[max_ec50_idx]} ({ec50_values[max_ec50_idx]:.4f})")
-    print(f"Best model fit: {ec50_labels[best_fit_idx]} (R² = {r2_values[best_fit_idx]:.4f}, RMSE = {rmse_values[best_fit_idx]:.4f})")
+#     print(f"Lowest EC50: {ec50_labels[min_ec50_idx]} ({ec50_values[min_ec50_idx]:.4f})")
+#     print(f"Highest EC50: {ec50_labels[max_ec50_idx]} ({ec50_values[max_ec50_idx]:.4f})")
+#     print(f"Best model fit: {ec50_labels[best_fit_idx]} (R² = {r2_values[best_fit_idx]:.4f}, RMSE = {rmse_values[best_fit_idx]:.4f})")
 
-    if max(ec50_values) - min(ec50_values) > 1.0:
-        print("\nThere is a substantial difference between EC50 values across metrics.")
-        print("This suggests that different precision metrics have different sensitivity to dimension.")
-    else:
-        print("\nThe EC50 values are relatively close across different metrics.")
-        print("This suggests consistent behavior across different precision metrics.")
+#     if max(ec50_values) - min(ec50_values) > 1.0:
+#         print("\nThere is a substantial difference between EC50 values across metrics.")
+#         print("This suggests that different precision metrics have different sensitivity to dimension.")
+#     else:
+#         print("\nThe EC50 values are relatively close across different metrics.")
+#         print("This suggests consistent behavior across different precision metrics.")
