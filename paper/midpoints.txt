@@ -1,0 +1,48 @@
+WIT:
+Precision at 5:
+Min: 0.67375, Max: 1.0
+Midpoint: 0.836875
+Closest dimension to midpoint: 40.0
+
+Precision at 10:
+Min: 0.72375, Max: 1.0
+Midpoint: 0.861875
+Closest dimension to midpoint: 40.0
+
+Precision at 15:
+Min: 0.7366666666666667, Max: 1.0
+Midpoint: 0.8683333333333334
+Closest dimension to midpoint: 42.0
+
+FLICKR:
+Precision at 5:
+Min: 0.7263999999999999, Max: 0.9992
+Midpoint: 0.8628
+Closest dimension to midpoint: 26.0
+
+Precision at 10:
+Min: 0.7562000000000001, Max: 0.999
+Midpoint: 0.8776
+Closest dimension to midpoint: 28.0
+
+Precision at 15:
+Min: 0.7769333333333333, Max: 0.9993333333333334
+Midpoint: 0.8881333333333333
+Closest dimension to midpoint: 28.0
+
+DOCCI:
+Precision at 5:
+Min: 0.686, Max: 0.9964
+Midpoint: 0.8412
+Closest dimension to midpoint: 34.0
+
+Precision at 10:
+Min: 0.7158000000000001, Max: 0.9966
+Midpoint: 0.8562000000000001
+Closest dimension to midpoint: 34.0
+
+Precision at 15:
+Min: 0.7330666666666666, Max: 0.9973333333333334
+Midpoint: 0.8652
+Closest dimension to midpoint: 34.0
+
