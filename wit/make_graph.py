@@ -397,9 +397,10 @@ for i, (label, title) in enumerate(zip(labels, titles)):
     # Add extra spacing and include RMSE
     r2_text = f"\n\n$R^2 = {r_squared:.4f}$"
     rmse_text = f"\n$RMSE = {rmse:.4f}$"
+    ec50_text = f"\n$EC50 = {ec50:.4f}$"
     
     # Position it with more margin on the right
-    ax.text(0.90, 0.20, equation + r2_text + rmse_text, 
+    ax.text(0.90, 0.20, equation + r2_text + rmse_text + ec50_text, 
             transform=ax.transAxes, fontsize=9,
             verticalalignment='bottom', horizontalalignment='right',
             bbox=dict(boxstyle='round', facecolor='white', alpha=0.9, pad=0.7))
