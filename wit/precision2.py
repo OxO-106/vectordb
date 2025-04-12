@@ -78,7 +78,7 @@ def main():
     os.makedirs(data_dir, exist_ok=True)
 
     # Input file path
-    input_file = os.path.join(data_dir, "embedding.csv")
+    input_file = os.path.join("embedding.csv")
 
     # Read the original embeddings
     print("Loading embeddings...")
@@ -102,7 +102,7 @@ def main():
     print(f"Original caption vectors shape: {original_caption_vecs.shape}")
 
     # Set dimensions to analyze (1, then multiples of 2 from 2 to 320)
-    dimensions = [1] + list(range(2, 321, 2))
+    dimensions = [1] + list(range(2, 513, 2))
 
     # Store precision results
     precision_data = []
@@ -132,10 +132,10 @@ def main():
     # Save precision results to CSV
     print("Saving precision results...")
     precision_df = pd.DataFrame(precision_data)
-    precision_df.to_csv(os.path.join(data_dir, "precision4.csv"), index=False)
+    precision_df.to_csv(os.path.join("precision.csv"), index=False)
 
     print("\nAnalysis complete!")
-    print(f"Precision results saved to: {os.path.join(data_dir, 'precision4.csv')}")
+    print(f"Precision results saved to: {os.path.join('precision.csv')}")
 
 if __name__ == "__main__":
     main()

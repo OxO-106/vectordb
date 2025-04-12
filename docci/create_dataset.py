@@ -4,7 +4,7 @@ import shutil
 import pandas as pd
 from pathlib import Path
 
-def create_dataset(jsonl_path, image_folder, n_samples=500):
+def create_dataset(jsonl_path, image_folder, n_samples=512):
     # Create directories if they don't exist
     data_dir = Path('data')
     img_dir = Path('img')
@@ -46,7 +46,7 @@ def create_dataset(jsonl_path, image_folder, n_samples=500):
     if len(final_df) < n_samples:
         print(f"Warning: Only found {len(final_df)} valid images out of requested {n_samples}")
 
-    csv_path = data_dir / 'data500.csv'
+    csv_path = 'data512.csv'
     final_df.to_csv(csv_path, index=False)
     print(f"Created dataset with {len(final_df)} entries")
     print(f"CSV file saved at: {csv_path}")

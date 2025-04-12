@@ -2,7 +2,7 @@ import pandas as pd
 import shutil
 import os
 
-def create_dataset(source_img_dir, dest_img_dir, csv_path, output_dir, n_samples=500):
+def create_dataset(source_img_dir, dest_img_dir, csv_path, output_dir, n_samples=512):
     """
     Extract a subset of images and their references to create a smaller dataset.
     
@@ -37,14 +37,14 @@ def create_dataset(source_img_dir, dest_img_dir, csv_path, output_dir, n_samples
             print(f"Error copying {image_filename}: {str(e)}")
     
     # Save the subset of references to a new CSV file
-    output_csv_path = os.path.join(output_dir, 'reference500.csv')
+    output_csv_path = os.path.join(output_dir, 'data512.csv')
     df_subset.to_csv(output_csv_path, index=False)
     print(f"\nProcess completed:")
     print(f"- {len(df_subset)} references saved to {output_csv_path}")
     print(f"- Images copied to {dest_img_dir}")
 
 # Define paths
-source_img_dir = 'flickr30k-images'
+source_img_dir = 'flickr30k-images/flickr30k-images/flickr30k-images'
 dest_img_dir = 'img'
 csv_path = 'image_references.csv'
 output_dir = 'data'

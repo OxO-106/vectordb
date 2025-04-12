@@ -37,7 +37,7 @@ def four_param_logistic(x, a, b, c, d):
     return d + (a - d) / (1 + (x/c)**b)
 
 # Load the data
-data = pd.read_csv('data/precision.csv')
+data = pd.read_csv('precision.csv')
 
 # Define metrics to plot
 labels = ['precision_at_5', 'precision_at_10', 'precision_at_15']
