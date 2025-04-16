@@ -80,35 +80,35 @@ def evaluate_precision_for_dimension(original_image_vecs, original_caption_vecs,
         'dimensionality': reduced_caption_vecs.shape[1]
     }
 
-def calculate_rate_of_change(precision_results):
-    """Calculate rate of change of precision between consecutive dimensions"""
-    dims = sorted([dim for dim in precision_results.keys()])
-    rate_of_change = []
+# def calculate_rate_of_change(precision_results):
+#     """Calculate rate of change of precision between consecutive dimensions"""
+#     dims = sorted([dim for dim in precision_results.keys()])
+#     rate_of_change = []
     
-    for i in range(1, len(dims)):
-        curr_dim = dims[i]
-        prev_dim = dims[i-1]
-        curr_precision = precision_results[curr_dim]['mean']
-        prev_precision = precision_results[prev_dim]['mean']
+#     for i in range(1, len(dims)):
+#         curr_dim = dims[i]
+#         prev_dim = dims[i-1]
+#         curr_precision = precision_results[curr_dim]['mean']
+#         prev_precision = precision_results[prev_dim]['mean']
         
-        # Calculate absolute difference
-        abs_diff = curr_precision - prev_precision
+#         # Calculate absolute difference
+#         abs_diff = curr_precision - prev_precision
         
-        # Calculate rate of change (normalized by dimension difference)
-        dim_diff = curr_dim - prev_dim
-        rate = abs_diff / dim_diff
+#         # Calculate rate of change (normalized by dimension difference)
+#         dim_diff = curr_dim - prev_dim
+#         rate = abs_diff / dim_diff
         
-        rate_of_change.append({
-            'dimension_range': f"{prev_dim}-{curr_dim}",
-            'prev_dimension': prev_dim,
-            'curr_dimension': curr_dim,
-            'prev_precision': prev_precision,
-            'curr_precision': curr_precision,
-            'abs_difference': abs_diff,
-            'rate_of_change': rate
-        })
+#         rate_of_change.append({
+#             'dimension_range': f"{prev_dim}-{curr_dim}",
+#             'prev_dimension': prev_dim,
+#             'curr_dimension': curr_dim,
+#             'prev_precision': prev_precision,
+#             'curr_precision': curr_precision,
+#             'abs_difference': abs_diff,
+#             'rate_of_change': rate
+#         })
     
-    return rate_of_change
+#     return rate_of_change
 
 def main():
     # Set up data directory
@@ -140,7 +140,7 @@ def main():
     print(f"Original caption vectors shape: {original_caption_vecs.shape}")
     
     # Set dimensions to analyze (multiples of 4 up to 320)
-    dimensions = list(range(4, 321, 4))
+    dimensions = list(range(2, 321, 2))
     
     # Store precision results
     precision_results = {}
@@ -171,21 +171,21 @@ def main():
         })
     
     # Calculate rate of change
-    print("\nCalculating rate of change...")
-    rate_of_change = calculate_rate_of_change(precision_results)
+    # print("\nCalculating rate of change...")
+    # rate_of_change = calculate_rate_of_change(precision_results)
     
     # Sort rate of change from highest to lowest
-    sorted_rate_of_change = sorted(rate_of_change, key=lambda x: x['rate_of_change'], reverse=True)
+    # sorted_rate_of_change = sorted(rate_of_change, key=lambda x: x['rate_of_change'], reverse=True)
     
     # Save precision results to CSV
     print("Saving precision results...")
     precision_df = pd.DataFrame(precision_data)
-    precision_df.to_csv(os.path.join(data_dir, "precision4.csv"), index=False)
+    precision_df.to_csv(os.path.join(data_dir, "precision_new.csv"), index=False)
     
-    # Save rate of change to CSV
-    print("Saving rate of change results...")
-    rate_df = pd.DataFrame(sorted_rate_of_change)
-    rate_df.to_csv(os.path.join(data_dir, "rateofchange.csv"), index=False)
+    # # Save rate of change to CSV
+    # print("Saving rate of change results...")
+    # rate_df = pd.DataFrame(sorted_rate_of_change)
+    # rate_df.to_csv(os.path.join(data_dir, "rateofchange.csv"), index=False)
     
     # Create visualizations
     print("\nCreating visualizations...")
@@ -195,52 +195,52 @@ def main():
     os.makedirs(plots_dir, exist_ok=True)
     
     # Plot precision vs. dimension
-    plt.figure(figsize=(12, 6))
-    plt.plot([d['dimension'] for d in precision_data], 
-             [d['precision_at_10'] for d in precision_data], 
-             'o-', markersize=4)
-    plt.xlabel('Dimension')
-    plt.ylabel('Precision@10')
-    plt.title('Precision@10 vs. Dimension')
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.savefig(os.path.join(plots_dir, "precision_vs_dimension.png"), dpi=300, bbox_inches='tight')
+    # plt.figure(figsize=(12, 6))
+    # plt.plot([d['dimension'] for d in precision_data], 
+    #          [d['precision_at_10'] for d in precision_data], 
+    #          'o-', markersize=4)
+    # plt.xlabel('Dimension')
+    # plt.ylabel('Precision@10')
+    # plt.title('Precision@10 vs. Dimension')
+    # plt.grid(True, linestyle='--', alpha=0.7)
+    # plt.savefig(os.path.join(plots_dir, "precision_vs_dimension.png"), dpi=300, bbox_inches='tight')
     
-    # Plot rate of change vs. dimension
-    plt.figure(figsize=(12, 6))
-    plt.bar([f"{r['prev_dimension']}-{r['curr_dimension']}" for r in rate_of_change[::8]],  # Use every 8th label to avoid crowding
-            [r['rate_of_change'] for r in rate_of_change[::8]],
-            width=0.7)
-    plt.xlabel('Dimension Range')
-    plt.ylabel('Rate of Change')
-    plt.title('Rate of Change in Precision@10 vs. Dimension Range')
-    plt.xticks(rotation=45)
-    plt.grid(True, linestyle='--', alpha=0.7, axis='y')
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, "rate_of_change.png"), dpi=300, bbox_inches='tight')
+    # # Plot rate of change vs. dimension
+    # plt.figure(figsize=(12, 6))
+    # plt.bar([f"{r['prev_dimension']}-{r['curr_dimension']}" for r in rate_of_change[::8]],  # Use every 8th label to avoid crowding
+    #         [r['rate_of_change'] for r in rate_of_change[::8]],
+    #         width=0.7)
+    # plt.xlabel('Dimension Range')
+    # plt.ylabel('Rate of Change')
+    # plt.title('Rate of Change in Precision@10 vs. Dimension Range')
+    # plt.xticks(rotation=45)
+    # plt.grid(True, linestyle='--', alpha=0.7, axis='y')
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plots_dir, "rate_of_change.png"), dpi=300, bbox_inches='tight')
     
     # Plot top 10 highest rate of change
-    top_10_roc = sorted_rate_of_change[:10]
-    plt.figure(figsize=(12, 6))
-    plt.bar([f"{r['prev_dimension']}-{r['curr_dimension']}" for r in top_10_roc],
-            [r['rate_of_change'] for r in top_10_roc],
-            width=0.7)
-    plt.xlabel('Dimension Range')
-    plt.ylabel('Rate of Change')
-    plt.title('Top 10 Dimension Ranges with Highest Rate of Change')
-    plt.xticks(rotation=45)
-    plt.grid(True, linestyle='--', alpha=0.7, axis='y')
-    plt.tight_layout()
-    plt.savefig(os.path.join(plots_dir, "top10_rate_of_change.png"), dpi=300, bbox_inches='tight')
+    # top_10_roc = sorted_rate_of_change[:10]
+    # plt.figure(figsize=(12, 6))
+    # plt.bar([f"{r['prev_dimension']}-{r['curr_dimension']}" for r in top_10_roc],
+    #         [r['rate_of_change'] for r in top_10_roc],
+    #         width=0.7)
+    # plt.xlabel('Dimension Range')
+    # plt.ylabel('Rate of Change')
+    # plt.title('Top 10 Dimension Ranges with Highest Rate of Change')
+    # plt.xticks(rotation=45)
+    # plt.grid(True, linestyle='--', alpha=0.7, axis='y')
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plots_dir, "top10_rate_of_change.png"), dpi=300, bbox_inches='tight')
     
     print("\nAnalysis complete!")
     print(f"Precision results saved to: {os.path.join(data_dir, 'precision4.csv')}")
-    print(f"Rate of change results saved to: {os.path.join(data_dir, 'rateofchange.csv')}")
-    print(f"Plots saved to: {plots_dir}")
+    # print(f"Rate of change results saved to: {os.path.join(data_dir, 'rateofchange.csv')}")
+    # print(f"Plots saved to: {plots_dir}")
     
     # Print top 5 dimensions with highest rate of change
-    print("\nTop 5 dimension ranges with highest rate of change:")
-    for i, r in enumerate(sorted_rate_of_change[:5], 1):
-        print(f"{i}. {r['dimension_range']}: {r['rate_of_change']:.6f}")
+    # print("\nTop 5 dimension ranges with highest rate of change:")
+    # for i, r in enumerate(sorted_rate_of_change[:5], 1):
+    #     print(f"{i}. {r['dimension_range']}: {r['rate_of_change']:.6f}")
     
     # Print sample of the data to verify parsing worked correctly
     print("\nSample data verification:")
