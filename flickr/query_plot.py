@@ -55,17 +55,7 @@ def plot_dimension_results(csv_file=None, results_dict=None, dimensions=None,
         plt.plot(dimensions, query_times, 'b-o', linewidth=2, markersize=8)
         plt.grid(True, linestyle='--', alpha=0.7)
     
-    # Format y-axis to be more readable (milliseconds or microseconds if times are small)
-    if max(query_times) < 0.001:
-        # Convert to microseconds
-        plt.plot(range(len(dimensions)), [t * 1000000 for t in query_times], 'b-o', linewidth=2, markersize=8)
-        plt.ylabel('Query Time (microseconds)')
-    elif max(query_times) < 1:
-        # Convert to milliseconds
-        plt.plot(range(len(dimensions)), [t * 1000 for t in query_times], 'b-o', linewidth=2, markersize=8)
-        plt.ylabel('Query Time (milliseconds)')
-    else:
-        plt.ylabel('Query Time (seconds)')
+    plt.ylabel('Avg. Query Time (s) per Query')
     
     # Add labels and title
     plt.xlabel('Dimension')
